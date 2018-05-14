@@ -1,11 +1,9 @@
 # orb
----
 *I'll have one Lua with sugar, please.*
 
 Orb is an alternative syntax for Lua. It aims to let you to write more effective code with less typing. It accomplishes this by shortening normal Lua syntax, or adding new keywords or operators in order to let you write complex code quickly. The latter of which is called *syntax sugar*.
 
 ## Table of contents
----
 <!-- TOC depthFrom:2 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Table of contents](#table-of-contents)
@@ -24,11 +22,9 @@ Orb is an alternative syntax for Lua. It aims to let you to write more effective
 <!-- /TOC -->
 
 ## Modified syntax
----
 In order to understand the Orb syntax, it is easiest to *assume* Lua syntax and to check the below table for any changed syntax. Most syntax changes were decided upon in order to reduce the amount of typing it takes to accomplish the same functionality.
 
 ### Local
----
 The `local` keyword is replaced with the `let` keyword. This applies in all cases where the `local` keyword would be used.
 
 ##### Orb
@@ -42,7 +38,6 @@ local x = 4
 ```
 
 ### Blocks
----
 Code blocks such as those after an `if`, `for`, `repeat` or `while` loop have their begin operators (`then`, `do`) and end operators (`end`) replaced with `{` and `}`. They are also required for blocks that did not previously have those begin or end operators, such as the `repeat` statement.
 
 ##### Orb
@@ -62,7 +57,6 @@ while x == 4 do end
 ```
 
 ### Functions
----
 The `function` keyword is shortened to `func`, along with the change to blocks laid out above.
 
 ##### Orb
@@ -78,7 +72,6 @@ local function x() end
 ```
 
 ### Not-equal operator
----
 The not-equal operator `~=` is replaced with `!=`.
 
 ##### Orb
@@ -92,7 +85,6 @@ x ~= 5
 ```
 
 ### Negation operator
----
 The negation operator `not` is replaced with `!`.
 
 ##### Orb
@@ -106,11 +98,9 @@ x == not y
 ```
 
 ## New syntax
----
 Orb adds quite a bit of new syntax, most of which are just syntax sugar for longer Lua expressions.
 
 ### Assignment expressions
----
 This introduces syntax such as `+=` as a shorter version of `= var +`. Note that this does not allow you to change multiple variables at once.
 
 ##### Orb
@@ -124,7 +114,6 @@ x = x + 4
 ```
 
 ### Inline increment/decrement
----
 Adds support for `++` and `--` operators, before and after a variable.
 
 ##### Orb
@@ -144,7 +133,6 @@ x = z
 ```
 
 ### Lambda expressions
----
 Sometimes we want to pass an inline function as an argument. Since typing `func(x) {}` is still quite bloated, Orb introduces lambda functions.
 
 ##### Orb
@@ -162,11 +150,9 @@ x = function(y, z) return y, z end
 ```
 
 ### Generators
----
 Orb supports generator functions. These are useful using actual coroutines you can use Orb's builtin generator compiler. A function is a generator when the `func` keyword is suffixed with an asterisk, like so: `func*`.
 
 #### Example 1
----
 Without any looping constructs.
 
 ##### Orb
@@ -207,7 +193,6 @@ print(generator())
 ```
 
 #### Example 2
----
 Using a for-loop.
 
 ##### Orb
@@ -237,7 +222,6 @@ end
 ```
 
 #### Example 3
----
 Using a while-loop.
 
 ##### Orb
