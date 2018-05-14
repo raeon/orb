@@ -22,7 +22,7 @@ Orb is an alternative syntax for Lua. It aims to let you to create more function
 <!-- /TOC -->
 
 ## Modified syntax
-Orb starts from the default Lua syntax. From here, we can read this section to see what is different, and the next section to see what syntax sugar has been added.
+Orb starts from the default Lua syntax. From here, we can read this section to see what is different, and the next section to see what syntax has been added.
 
 ### Local
 The `local` keyword is replaced with the `let` keyword. This applies in all cases where the `local` keyword would be used.
