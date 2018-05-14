@@ -100,7 +100,7 @@ x == not y
 ```
 
 ## New syntax
-Orb adds quite a bit of new syntax, most of which are just syntax sugar for longer Lua expressions.
+Orb adds quite a bit of new syntax, most of which is regular syntax sugar. The remainder are better described as macros.
 
 ### Assignment expressions
 This introduces syntax such as `+=` as a shorter version of `= var +`. Note that this does not allow you to change multiple variables at once.
@@ -108,11 +108,19 @@ This introduces syntax such as `+=` as a shorter version of `= var +`. Note that
 ##### Orb
 ```
 x += 4
+x -= 6
+x *= 8
+x /= 10
+x %= 12
 ```
 
 ##### Lua
 ```lua
 x = x + 4
+x = x - 6
+x = x * 8
+x = x / 10
+x = x % 12
 ```
 
 ### Inline increment/decrement
@@ -152,7 +160,7 @@ x = function(y, z) return y, z end
 ```
 
 ### Generators
-Orb supports generator functions. These are useful using actual coroutines you can use Orb's builtin generator compiler. A function is a generator when the `func` keyword is suffixed with an asterisk, like so: `func*`.
+Orb adds generator functions. A function is a generator when the `func` keyword is suffixed with an asterisk, like so: `func*`. This enables the `yield` keyword. Refer to the examples below for the correct usage.
 
 #### Example 1
 Without any looping constructs.
@@ -217,8 +225,9 @@ local function y(a, b)
             if __i >= b then
                 __state = __state + 1
             end
-            return __i
+            return true, {__i}
         end
+		return false
     end
 end
 ```
@@ -244,8 +253,9 @@ local function z()
     return function()
         if __state == 1 then
             i = i + 1
-            return i - 1
+            return true, {i - 1}
         end
+		return false
     end
 end
 ```
@@ -256,7 +266,7 @@ local function z()
     local i = 1
     return function()
         i = i + 1
-        return i - 1
+        return true, {i - 1}
     end
 end
 ```
