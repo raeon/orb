@@ -1,7 +1,9 @@
 # orb
 *I'll have one Lua with sugar, please.*
 
-Orb is an alternative syntax for Lua. It aims to let you to write more effective code with less typing. It accomplishes this by shortening normal Lua syntax, or adding new keywords or operators in order to let you write complex code quickly. The latter of which is called *syntax sugar*.
+Orb is an alternative syntax for Lua. It aims to let you to create more functionality with less typing. It accomplishes this by shortening normal Lua syntax and adding new keywords and operators.
+
+*Hmmm, syntax sugar*.
 
 ## Table of contents
 <!-- TOC depthFrom:2 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
