@@ -56,6 +56,23 @@ repeat until x == 4
 while x == 4 do end
 ```
 
+### Comments
+Since [Inline increment/decrement](#inline-incrementdecrement) operators conflict with Lua's `-- Single line comment`s, comments are now C-style.
+
+#### Orb
+```
+// Wow, a single line comment!
+/* Could it be?
+   A multi-line comment? */
+```
+
+#### Lua
+```lua
+-- Wow, a single line comment!
+/* Could it be?
+   A multi-line comment? */
+```
+
 ### Functions
 The `function` keyword is shortened to `func`, along with the change to blocks laid out above.
 
