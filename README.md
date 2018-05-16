@@ -10,13 +10,17 @@ Orb is an alternative syntax for Lua. It aims to let you to create more function
 - [Modified syntax](#modified-syntax)
 	- [Local](#local)
 	- [Blocks](#blocks)
+	- [Comments](#comments)
 	- [Functions](#functions)
+	- [And- and or-operator](#and-and-or-operator)
 	- [Not-equal operator](#not-equal-operator)
 	- [Negation operator](#negation-operator)
 - [New syntax](#new-syntax)
 	- [Assignment expressions](#assignment-expressions)
 	- [Inline increment/decrement](#inline-incrementdecrement)
+	- [Return expressions](#return-expressions)
 	- [Lambda expressions](#lambda-expressions)
+	- [Compare statements](#compare-statements)
 	- [Generators](#generators)
 
 <!-- /TOC -->
@@ -57,20 +61,20 @@ while x == 4 do end
 ```
 
 ### Comments
-Since [Inline increment/decrement](#inline-incrementdecrement) operators conflict with Lua's `-- Single line comment`s, comments are now C-style.
+Since [Inline increment/decrement](#inline-incrementdecrement) operators may introduce syntactical ambiguity with Lua's `-- Single line comment` syntax, comments are now C-style.
 
-#### Orb
+##### Orb
 ```
 // Wow, a single line comment!
 /* Could it be?
    A multi-line comment? */
 ```
 
-#### Lua
+##### Lua
 ```lua
 -- Wow, a single line comment!
-/* Could it be?
-   A multi-line comment? */
+--[[ Could it be?
+   A multi-line comment? ]]
 ```
 
 ### Functions
@@ -86,6 +90,21 @@ let func x() {}
 ```lua
 function x() end
 local function x() end
+```
+
+### And- and or-operator
+The `and` and `or` operators are replaced with `&&` and `||`.
+
+##### Orb
+```
+x && y
+x || y
+```
+
+##### Lua
+```lua
+x and y
+x or y
 ```
 
 ### Not-equal operator
@@ -118,7 +137,10 @@ x == not y
 Orb adds quite a bit of new syntax, most of which is regular syntax sugar. The remainder are better described as macros.
 
 ### Assignment expressions
-This introduces syntax such as `+=` as a shorter version of `= var +`. Note that this does not allow you to change multiple variables at once.
+This introduces syntax such as `a += b` as a shorter version of `a = a + b`. Note that this does not allow you to change multiple variables at once.
+
+#### Example 1
+Regular mathematical operators.
 
 ##### Orb
 ```
@@ -138,14 +160,34 @@ x = x / 10
 x = x % 12
 ```
 
+#### Example 2
+Inline variable declarations.
+
+##### Orb
+```
+if x = next() {
+	return x
+}
+```
+
+##### Lua
+```lua
+x = next()
+if x then
+	return x
+end
+```
+
 ### Inline increment/decrement
-Adds support for `++` and `--` operators, before and after a variable.
+Adds support for `++` and `--` operators, before and after a variable. This is actually the same as [Assignment expressions](#assignment-expressions), but an even shorter version.
 
 ##### Orb
 ```
 x = y++
 
 x = --z
+
+y, z = x++, x++
 ```
 
 ##### Lua
@@ -155,6 +197,34 @@ y = y + 1
 
 z = z - 1
 x = z
+
+y, z = x, x + 1
+x = x + 2
+```
+
+### Return expressions
+Checking for null using `if not x then return end` statements is unnecessarily long. The `return` operator in Orb can be placed at positions where expressions are normally expected.
+
+##### Orb
+```
+x = y or return
+
+// parens may be necessary to disambiguate between 'c()' returning
+// multiple results or the error message being assigned to 'b'.
+a, b = c() or return (nil, 'error: c() returned nil'), d
+```
+
+##### Lua
+```lua
+x = y
+if not x then
+	return
+end
+
+a, b = c(), d
+if not a then
+	return nil, 'error: c() returned nil'
+end
 ```
 
 ### Lambda expressions
@@ -174,8 +244,79 @@ x = function(y) return y end
 x = function(y, z) return y, z end
 ```
 
+### Compare statements
+In order to help with easily disambiguating an input value, the `compare` statement has been added. This closely resembles the typical `switch` statement, but with either single or multiple matches in one line, and without fallthrough. See below for an example.
+
+#### Example 1
+Using `compare` as a `switch` statement (still without fallthrough though!).
+
+##### Orb
+```
+let x = 5
+compare x {
+	0 -> print('x is zero'), // if x is 0
+	_ -> print('x is nonzero') // otherwise (default)
+}
+```
+
+##### Lua
+```
+local x = 5
+local __compare0 = {
+	[0] = function()
+		print('x is zero')
+	end,
+}
+local __compare0_result = __compare0[x]
+if __compare0_result then
+	__compare0_result()
+else
+	print('x is nonzero')
+end
+```
+
+#### Example 2
+Using `compare` with it's full capabilities.
+
+##### Orb
+```
+let x = 5
+compare x {
+	0..3 -> print('x shrunk:', x),
+	5 -> print('x did not change since declaration'),
+	7, 8, 9 -> print('x has grown taller:', x)
+	_ -> print('x does not match any of the patterns')
+}
+```
+
+##### Lua
+```lua
+local x = 5
+local __compare0_1 = function()
+	print('x has grown taller:', x)
+end
+local __compare0 = {
+	[5] = function()
+		print('x did not change since declaration')
+	end,
+	[7] = __compare0_1,
+	[8] = __compare0_1,
+	[9] = __compare0_1,
+}
+local __compare0_result = __compare0[x]
+if  then
+	__compare0[x]()
+elseif x >= 0 and x <= 3 then
+	print('x shrunk:', x)
+else
+	print('x does not match any of the patterns')
+end
+```
+
 ### Generators
 Orb adds generator functions. A function is a generator when the `func` keyword is suffixed with an asterisk, like so: `func*`. This enables the `yield` keyword. Refer to the examples below for the correct usage.
+
+An interesting detail of generators is that they are functionality wise equivalent to using Lua's built-in `coroutine` library. The difference however is that Orb's generators will still work even if the `coroutine` library is not enabled.
 
 #### Example 1
 Without any looping constructs.
@@ -188,13 +329,15 @@ let func* x() {
     yield 3
 }
 let generator = x()
-print(generator()) -- true, {}
-print(generator())
-print(generator())
+print(generator()) // true, {1}
+print(generator()) // true, {2}
+print(generator()) // true, {3}
+print(generator()) // false, nil
 ```
 
 ##### Lua
 ```lua
+-- Using generators
 local function x()
     local __state = 1
     return function()
@@ -212,9 +355,20 @@ local function x()
     end
 end
 local generator = x()
-print(generator())
-print(generator())
-print(generator())
+print(generator()) -- true, {1}
+print(generator()) -- true, {2}
+print(generator()) -- true, {3}
+print(generator()) -- false, nil
+
+-- Using coroutines
+local function x()
+	return coroutine.wrap(function()
+		coroutine.yield(1)
+		coroutine.yield(2)
+		coroutine.yield(3)
+	end)
+end
+-- ...etc
 ```
 
 #### Example 2
