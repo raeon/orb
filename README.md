@@ -8,20 +8,20 @@ Orb is an alternative syntax for Lua. It aims to let you to create more function
 
 - [Table of contents](#table-of-contents)
 - [Modified syntax](#modified-syntax)
-	- [Local](#local)
-	- [Blocks](#blocks)
-	- [Comments](#comments)
-	- [Functions](#functions)
-	- [And- and or-operator](#and-and-or-operator)
-	- [Not-equal operator](#not-equal-operator)
-	- [Negation operator](#negation-operator)
+    - [Local](#local)
+    - [Blocks](#blocks)
+    - [Comments](#comments)
+    - [Functions](#functions)
+    - [And- and or-operator](#and-and-or-operator)
+    - [Not-equal operator](#not-equal-operator)
+    - [Negation operator](#negation-operator)
 - [New syntax](#new-syntax)
-	- [Assignment expressions](#assignment-expressions)
-	- [Inline increment/decrement](#inline-incrementdecrement)
-	- [Return expressions](#return-expressions)
-	- [Lambda expressions](#lambda-expressions)
-	- [Compare statements](#compare-statements)
-	- [Generators](#generators)
+    - [Assignment expressions](#assignment-expressions)
+    - [Inline increment/decrement](#inline-incrementdecrement)
+    - [Return expressions](#return-expressions)
+    - [Lambda expressions](#lambda-expressions)
+    - [Compare statements](#compare-statements)
+    - [Generators](#generators)
 
 <!-- /TOC -->
 
@@ -166,7 +166,7 @@ Inline variable declarations.
 ##### Orb
 ```
 if x = next() {
-	return x
+    return x
 }
 ```
 
@@ -174,7 +174,7 @@ if x = next() {
 ```lua
 x = next()
 if x then
-	return x
+    return x
 end
 ```
 
@@ -218,12 +218,12 @@ a, b = c() or return (nil, 'error: c() returned nil'), d
 ```lua
 x = y
 if not x then
-	return
+    return
 end
 
 a, b = c(), d
 if not a then
-	return nil, 'error: c() returned nil'
+    return nil, 'error: c() returned nil'
 end
 ```
 
@@ -254,8 +254,8 @@ Using `compare` as a `switch` statement (still without fallthrough though!).
 ```
 let x = 5
 compare x {
-	0 -> print('x is zero'), // if x is 0
-	_ -> print('x is nonzero') // otherwise (default)
+    0 -> print('x is zero'), // if x is 0
+    _ -> print('x is nonzero') // otherwise (default)
 }
 ```
 
@@ -263,15 +263,15 @@ compare x {
 ```
 local x = 5
 local __compare0 = {
-	[0] = function()
-		print('x is zero')
-	end,
+    [0] = function()
+        print('x is zero')
+    end,
 }
 local __compare0_result = __compare0[x]
 if __compare0_result then
-	__compare0_result()
+    __compare0_result()
 else
-	print('x is nonzero')
+    print('x is nonzero')
 end
 ```
 
@@ -282,10 +282,10 @@ Using `compare` with it's full capabilities.
 ```
 let x = 5
 compare x {
-	0..3 -> print('x shrunk:', x),
-	5 -> print('x did not change since declaration'),
-	7, 8, 9 -> print('x has grown taller:', x)
-	_ -> print('x does not match any of the patterns')
+    0..3 -> print('x shrunk:', x),
+    5 -> print('x did not change since declaration'),
+    7, 8, 9 -> print('x has grown taller:', x)
+    _ -> print('x does not match any of the patterns')
 }
 ```
 
@@ -293,23 +293,23 @@ compare x {
 ```lua
 local x = 5
 local __compare0_1 = function()
-	print('x has grown taller:', x)
+    print('x has grown taller:', x)
 end
 local __compare0 = {
-	[5] = function()
-		print('x did not change since declaration')
-	end,
-	[7] = __compare0_1,
-	[8] = __compare0_1,
-	[9] = __compare0_1,
+    [5] = function()
+        print('x did not change since declaration')
+    end,
+    [7] = __compare0_1,
+    [8] = __compare0_1,
+    [9] = __compare0_1,
 }
 local __compare0_result = __compare0[x]
 if  then
-	__compare0[x]()
+    __compare0[x]()
 elseif x >= 0 and x <= 3 then
-	print('x shrunk:', x)
+    print('x shrunk:', x)
 else
-	print('x does not match any of the patterns')
+    print('x does not match any of the patterns')
 end
 ```
 
@@ -362,11 +362,11 @@ print(generator()) -- false, nil
 
 -- Using coroutines
 local function x()
-	return coroutine.wrap(function()
-		coroutine.yield(1)
-		coroutine.yield(2)
-		coroutine.yield(3)
-	end)
+    return coroutine.wrap(function()
+        coroutine.yield(1)
+        coroutine.yield(2)
+        coroutine.yield(3)
+    end)
 end
 -- ...etc
 ```
