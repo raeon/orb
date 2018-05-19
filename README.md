@@ -29,11 +29,11 @@ Orb is an alternative syntax for Lua. It aims to let you to create more function
 Orb starts from the default Lua syntax. From here, we can read this section to see what is different, and the next section to see what syntax has been added.
 
 ### Local
-The `local` keyword is replaced with the `let` keyword. This applies in all cases where the `local` keyword would be used.
+The `local` keyword is replaced with the `my` keyword. This applies in all cases where the `local` keyword would be used.
 
 ##### Orb
 ```
-let x = 4
+my x = 4
 ```
 
 ##### Lua
@@ -83,7 +83,7 @@ The `function` keyword is shortened to `func`, along with the change to blocks l
 ##### Orb
 ```
 func x() {}
-let func x() {}
+my func x() {}
 ```
 
 ##### Lua
@@ -252,7 +252,7 @@ Using `compare` as a `switch` statement (still without fallthrough though!).
 
 ##### Orb
 ```
-let x = 5
+my x = 5
 compare x {
     0 -> print('x is zero'), // if x is 0
     _ -> print('x is nonzero') // otherwise (default)
@@ -280,7 +280,7 @@ Using `compare` with it's full capabilities.
 
 ##### Orb
 ```
-let x = 5
+my x = 5
 compare x {
     0..3 -> print('x shrunk:', x),
     5 -> print('x did not change since declaration'),
@@ -304,13 +304,58 @@ local __compare0 = {
     [9] = __compare0_1,
 }
 local __compare0_result = __compare0[x]
-if  then
+if __compare0_result then
     __compare0[x]()
 elseif x >= 0 and x <= 3 then
     print('x shrunk:', x)
 else
     print('x does not match any of the patterns')
 end
+```
+
+### Import statements
+It shouldn't be necessary to `require(...)` a file only to then pull the imported variables from a table into the local scope, e.g.:
+```lua
+
+```
+This is there the Orb import statement comes in.
+
+##### Orb
+```
+import table
+
+from parsel import grammar, literal, pattern
+```
+
+##### Lua
+```lua
+local table = require('table')
+
+local parsel = require('parsel')
+local grammar, literal, pattern = parsel.grammar, parsel.literal, parsel.pattern
+```
+
+### Export statements
+It's much easier to declare inline whether something should be exported or not. With Orb, you can simply prefix any variable with `export` and it will be exported.
+
+##### Orb
+```
+export my x = 5
+
+export my func = -> 4
+```
+
+##### Lua
+```lua
+local x = 5
+local function func()
+    return 4
+end
+
+return {
+    x = x,
+    func = func
+}
 ```
 
 ### Generators
@@ -323,12 +368,12 @@ Without any looping constructs.
 
 ##### Orb
 ```
-let func* x() {
+my func* x() {
     yield 1
     yield 2
     yield 3
 }
-let generator = x()
+my generator = x()
 print(generator()) // true, {1}
 print(generator()) // true, {2}
 print(generator()) // true, {3}
@@ -376,7 +421,7 @@ Using a for-loop.
 
 ##### Orb
 ```
-let func* y(a, b) {
+my func* y(a, b) {
     for i=a,b,2 do
         yield i
     end
@@ -406,8 +451,8 @@ Using a while-loop.
 
 ##### Orb
 ```
-let func* z() {
-    let i = 1
+my func* z() {
+    my i = 1
     while true {
         yield i++
     }
